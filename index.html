@@ -330,7 +330,7 @@
 
         <div class="places-list">
             <div class="location-section">
-                <div class="location-header" onclick="zoomToCity('shanghai')">Shanghai (20)</div>
+                <div class="location-header" onclick="zoomToCity('shanghai')">Shanghai (21)</div>
                 <div class="place-item" data-location="The Bund" onclick="openGoogleImages('The Bund Shanghai')" onmouseenter="hoverLocationByName('The Bund')" onmouseleave="unhoverLocation()">
                     <div class="place-icon">🏛️</div>
                     <div class="place-content">
@@ -382,7 +382,7 @@
                     <div class="place-desc">TRON, Pirates, Zootopia themed park</div>
                 </div>
                 <div class="place-meta">
-                    <div class="place-cost">$155</div>
+                    <div class="place-cost">$100</div>
                     <div class="place-duration">Full day</div>
                 </div>
             </div>
@@ -551,10 +551,21 @@
                     <div class="place-duration">30-45 min</div>
                 </div>
             </div>
+            <div class="place-item" data-location="Pudong Airport" onclick="openGoogleImages('Shanghai Pudong International Airport')" onmouseenter="hoverLocationByName('Pudong Airport')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">✈️</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Pudong Airport (Return Flight)</div>
+                    <div class="place-desc">From Wuxi via Hongqiao (100min metro or 40min link)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$1-4</div>
+                    <div class="place-duration">1.5-2 hrs</div>
+                </div>
+            </div>
             </div>
 
             <div class="location-section">
-                <div class="location-header" onclick="zoomToCity('wuxi')">Wuxi (9)</div>
+                <div class="location-header" onclick="zoomToCity('wuxi')">Wuxi (8)</div>
                 <div class="place-item" data-location="Turtle Head Isle" onclick="openGoogleImages('Turtle Head Isle Wuxi')" onmouseenter="hoverLocationByName('Turtle Head Isle')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏝️</div>
                 <div class="place-content">
@@ -619,17 +630,6 @@
                 <div class="place-meta">
                     <div class="place-cost">$5-15</div>
                     <div class="place-duration">1-2 hrs</div>
-                </div>
-            </div>
-            <div class="place-item" data-location="Pegasus Water City" onclick="openGoogleImages('Pegasus Water City Wuxi Jiangyin')" onmouseenter="hoverLocationByName('Pegasus Water City')" onmouseleave="unhoverLocation()">
-                <div class="place-icon">🐴</div>
-                <div class="place-content">
-                    <div class="place-name">Spot: Pegasus Water City (Wuxi)</div>
-                    <div class="place-desc">Venice-style water town with horse shows</div>
-                </div>
-                <div class="place-meta">
-                    <div class="place-cost">Free</div>
-                    <div class="place-duration">2-3 hrs</div>
                 </div>
             </div>
             <div class="place-item" data-location="GreenTree Inn Wuxi" onclick="openGoogleImages('GreenTree Inn Wuxi Nanchang Walking Street')" onmouseenter="hoverLocationByName('GreenTree Inn Wuxi')" onmouseleave="unhoverLocation()">
@@ -729,7 +729,7 @@
         <div class="todo-list">
             <div class="todo-section">
                 <h3>To Research</h3>
-                <div class="todo-item">Find out the exact commute between places</div>
+                <div class="todo-item" style="text-decoration: line-through; opacity: 0.5;">Find out the exact commute between places</div>
                 <div class="todo-item">Find places to eat</div>
                 <div class="todo-item">Places to stay in Wuxi</div>
                 <div class="todo-item">Research Disneyland</div>
@@ -794,7 +794,6 @@
             { name: 'Drink: Well wells', desc: 'Trendy cafe and art space in Wuxi', coords: [31.5720, 120.2950], icon: '☕' },
             { name: 'Drink: Yourway taproom', desc: 'Craft brewery and taproom with local beers', coords: [31.5680, 120.3020], icon: '🍺' },
             { name: 'Food: Nanchan Temple Food Street', desc: 'Wuxi soup dumplings, hand-pulled noodles, local snacks', coords: [31.5740, 120.3030], icon: '🥟' },
-            { name: 'Spot: Pegasus Water City', desc: 'Venice-style water town with horse shows', coords: [31.92, 120.28], icon: '🐴' },
             { name: 'GreenTree Inn Wuxi', desc: 'Wuxi Nanchang Walking Street accommodation', coords: [31.5650, 120.3050], icon: '🏠' },
             { name: 'Spot: Meijiawu Tea Village', desc: 'Longjing Dragon Well tea plantations', coords: [30.20, 120.09], icon: '🍵' },
             { name: 'Spot: Xixi Wetland', desc: 'National wetland park with waterways', coords: [30.27, 120.06], icon: '🦆' },
@@ -806,6 +805,7 @@
             { name: 'Station: People\'s Square → Shanghai Center', desc: 'Line 2 from Jiangsu Road (15min more)', coords: [31.2304, 121.4737], icon: '🚇' },
             { name: 'Station: Shanghai West → Wuxi', desc: 'Near Putuo homestay, 28min to Wuxi (255 trains/day)', coords: [31.2600, 121.3700], icon: '🚄' },
             { name: 'Station: Shanghai Hongqiao → Hangzhou/Wuxi', desc: 'Main hub: 45min to Hangzhou, 30min to Wuxi', coords: [31.1910, 121.3098], icon: '🚄' },
+            { name: 'Pudong Airport', desc: 'From Wuxi via Hongqiao (100min metro or 40min link)', coords: [31.1443, 121.8083], icon: '✈️' },
             { name: 'Station: Wuxi ← Shanghai', desc: 'Main arrival from Shanghai (28-60min, $4)', coords: [31.58981, 120.30181], icon: '🚄' },
             { name: 'Station: Hangzhou East ← Shanghai', desc: 'Main arrival from Shanghai (45min-2hr, $4-70)', coords: [30.29368, 120.20852], icon: '🚄' }
         ];
@@ -987,6 +987,44 @@
                 className: 'route-label',
                 html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #48bb78; font-weight: bold; font-size: 11px; white-space: nowrap;">🚄 TRAIN | 45min | $4-70</div>',
                 iconSize: [160, 20]
+            })
+        }).addTo(map);
+
+        // Return route: Wuxi → Shanghai Hongqiao (for Pudong Airport)
+        const wuxiToHongqiaoRoute = L.polyline([
+            [31.58981, 120.30181], // Wuxi Station
+            [31.1910, 121.3098]    // Shanghai Hongqiao
+        ], {
+            color: '#E53E3E',
+            weight: 5,
+            opacity: 0.6,
+            dashArray: '15, 10'
+        }).addTo(map).bindPopup('🚄 Return Train: Wuxi → Hongqiao (30-60min, $4)');
+
+        L.marker([31.39, 120.81], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #E53E3E; font-weight: bold; font-size: 11px; white-space: nowrap;">🚄 Return to Hongqiao | 30-60min | $4</div>',
+                iconSize: [220, 20]
+            })
+        }).addTo(map);
+
+        // Metro/Link route: Hongqiao → Pudong Airport
+        const hongqiaoToPudongRoute = L.polyline([
+            [31.1910, 121.3098],  // Shanghai Hongqiao
+            [31.1443, 121.8083]   // Pudong Airport
+        ], {
+            color: '#9F7AEA',
+            weight: 5,
+            opacity: 0.7,
+            dashArray: '8, 8'
+        }).addTo(map).bindPopup('🚇 Metro Line 2: Hongqiao → Pudong (100min, $1) OR 🚄 Link (40min, $4)');
+
+        L.marker([31.17, 121.56], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #9F7AEA; font-weight: bold; font-size: 11px; white-space: nowrap;">🚇 METRO L2 100min $1 | 🚄 LINK 40min $4</div>',
+                iconSize: [260, 20]
             })
         }).addTo(map);
 
