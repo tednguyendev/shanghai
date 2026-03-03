@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shanghai & Wuxi Trip Planner</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            display: flex;
+        }
+        .sidebar {
+            width: 420px;
+            height: 100vh;
+            background: #f7fafc;
+            overflow-y: auto;
+            border-right: 2px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .sidebar-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            z-index: 10;
+        }
+        .sidebar-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .sidebar-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .day-filters {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            position: sticky;
+            top: 85px;
+            z-index: 9;
+        }
+        .day-filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .day-filter-btn:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+        .day-filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        .day-card.hidden {
+            display: none;
+        }
+        .day-card {
+            background: white;
+            margin: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 2px solid #e2e8f0;
+        }
+        .day-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .day-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .day-cost {
+            font-size: 16px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        .day-items {
+            padding: 10px;
+        }
+        .day-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f7fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .day-item:hover,
+        .day-item.highlight {
+            background: #edf2f7;
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+        .day-item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .day-item-content {
+            flex: 1;
+        }
+        .day-item-name {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .day-item-time {
+            font-size: 11px;
+            color: #718096;
+        }
+        .day-item-cost {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+        }
+        .total-summary {
+            background: white;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid #667eea;
+        }
+        .total-summary h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #667eea;
+        }
+        .dining .location-number { background: #f56565; }
+        .food .location-number { background: #ed8936; }
+        .nightlife .location-number { background: #9f7aea; }
+        .shopping .location-number { background: #48bb78; }
+        .wuxi .location-number { background: #38b2ac; }
+        .accommodation .location-number { background: #e53e3e; }
+        #map {
+            flex: 1;
+            height: 100vh;
+        }
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-size: 11px;
+        }
+        .legend h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #2d3748;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .legend-line {
+            width: 20px;
+            height: 3px;
+            margin-right: 6px;
+            border-radius: 2px;
+        }
+        .leaflet-tooltip {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #2d3748;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .leaflet-tooltip:hover {
+            background: rgba(102, 126, 234, 0.95);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+        .leaflet-tooltip-top:before,
+        .leaflet-tooltip-bottom:before,
+        .leaflet-tooltip-left:before,
+        .leaflet-tooltip-right:before {
+            display: none;
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .popup-content {
+            min-width: 200px;
+        }
+        .popup-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .popup-desc {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.5;
+        }
+        .popup-action {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #667eea;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>🗺️ Trip Planner</h1>
+            <p>Shanghai & Wuxi • 34 Places • 5 Days</p>
+        </div>
+
+        <div class="day-filters">
+            <button class="day-filter-btn active" onclick="filterDay('all')">All Days</button>
+            <button class="day-filter-btn" onclick="filterDay(1)">Day 1</button>
+            <button class="day-filter-btn" onclick="filterDay(2)">Day 2</button>
+            <button class="day-filter-btn" onclick="filterDay(3)">Day 3</button>
+            <button class="day-filter-btn" onclick="filterDay(4)">Day 4</button>
+            <button class="day-filter-btn" onclick="filterDay(5)">Day 5</button>
+        </div>
+
+        <div id="itineraryView" class="view-content active">
+            <div class="day-card" data-day="1">
+                <div class="day-header">
+                    <div class="day-title">Day 1: Classic Shanghai</div>
+                    <div class="day-cost">$45-75</div>
+                </div>
+                <div class="day-items">
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Start from Homestay</div>
+                            <div class="day-item-time">8:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                    <div class="day-item" data-location="The Bund" onclick="openGoogleImages('The Bund Shanghai')" onmouseenter="hoverLocationByName('The Bund')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏛️</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">The Bund</div>
+                            <div class="day-item-time">9:00 AM - 11:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">Free</div>
+                    </div>
+                    <div class="day-item" data-location="Nanjing Road" onclick="openGoogleImages('Nanjing Road Shanghai')" onmouseenter="hoverLocationByName('Nanjing Road')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🛍️</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Nanjing Road</div>
+                            <div class="day-item-time">11:00 AM - 1:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">Free</div>
+                    </div>
+                    <div class="day-item" data-location="Din Tai Fung" onclick="openGoogleImages('Din Tai Fung Shanghai')" onmouseenter="hoverLocationByName('Din Tai Fung')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🥟</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Din Tai Fung (Lunch)</div>
+                            <div class="day-item-time">1:00 PM - 2:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">$15-20</div>
+                    </div>
+                    <div class="day-item" data-location="Shanghai Museum" onclick="openGoogleImages('Shanghai Museum')" onmouseenter="hoverLocationByName('Shanghai Museum')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏺</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Shanghai Museum</div>
+                            <div class="day-item-time">3:00 PM - 5:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">Free</div>
+                    </div>
+                    <div class="day-item" data-location="Xintiandi" onclick="openGoogleImages('Xintiandi Shanghai')" onmouseenter="hoverLocationByName('Xintiandi')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🍜</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Xintiandi (Dinner & Drinks)</div>
+                            <div class="day-item-time">6:30 PM - 10:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$30-55</div>
+                    </div>
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Return to Homestay</div>
+                            <div class="day-item-time">11:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" data-day="2">
+                <div class="day-header">
+                    <div class="day-title">Day 2: Disney Magic</div>
+                    <div class="day-cost">$155</div>
+                </div>
+                <div class="day-items">
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Start from Homestay</div>
+                            <div class="day-item-time">8:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                    <div class="day-item" data-location="Shanghai Disney" onclick="openGoogleImages('Shanghai Disney Resort')" onmouseenter="hoverLocationByName('Shanghai Disney')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏰</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Shanghai Disney Resort</div>
+                            <div class="day-item-time">9:00 AM - 9:00 PM (Full day)</div>
+                        </div>
+                        <div class="day-item-cost">$155</div>
+                    </div>
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Return to Homestay</div>
+                            <div class="day-item-time">10:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" data-day="3">
+                <div class="day-header">
+                    <div class="day-title">Day 3: Art & Tech</div>
+                    <div class="day-cost">$85-120</div>
+                </div>
+                <div class="day-items">
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Start from Homestay</div>
+                            <div class="day-item-time">9:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                    <div class="day-item" data-location="teamLab Borderless" onclick="openGoogleImages('teamLab Borderless Shanghai')" onmouseenter="hoverLocationByName('teamLab Borderless')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🎨</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">teamLab Borderless</div>
+                            <div class="day-item-time">10:00 AM - 12:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">$30</div>
+                    </div>
+                    <div class="day-item" data-location="Natural History Museum" onclick="openGoogleImages('Shanghai Natural History Museum')" onmouseenter="hoverLocationByName('Natural History Museum')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🦕</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Natural History Museum</div>
+                            <div class="day-item-time">2:00 PM - 4:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$8</div>
+                    </div>
+                    <div class="day-item" data-location="Tianzifang" onclick="openGoogleImages('Tianzifang Shanghai')" onmouseenter="hoverLocationByName('Tianzifang')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🎭</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Tianzifang Shopping</div>
+                            <div class="day-item-time">4:30 PM - 6:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">$20-30</div>
+                    </div>
+                    <div class="day-item" data-location="Lost Heaven" onclick="openGoogleImages('Lost Heaven Shanghai')" onmouseenter="hoverLocationByName('Lost Heaven')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🍛</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Lost Heaven (Dinner)</div>
+                            <div class="day-item-time">7:00 PM - 9:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$25-35</div>
+                    </div>
+                    <div class="day-item" data-location="The Roof" onclick="openGoogleImages('The Roof Shanghai EDITION')" onmouseenter="hoverLocationByName('The Roof')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🌃</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">The Roof (Drinks)</div>
+                            <div class="day-item-time">9:30 PM - 11:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">$15-25</div>
+                    </div>
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Return to Homestay</div>
+                            <div class="day-item-time">12:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" data-day="4">
+                <div class="day-header">
+                    <div class="day-title">Day 4: Imperial Feast</div>
+                    <div class="day-cost">$87-101</div>
+                </div>
+                <div class="day-items">
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Start from Homestay</div>
+                            <div class="day-item-time">1:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                    <div class="day-item" data-location="Shanghai Tower" onclick="openGoogleImages('Shanghai Tower')" onmouseenter="hoverLocationByName('Shanghai Tower')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏙️</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Shanghai Tower</div>
+                            <div class="day-item-time">2:00 PM - 4:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$30</div>
+                    </div>
+                    <div class="day-item" data-location="Xuyan (叙宴)" onclick="openGoogleImages('Xuyan Shanghai palace banquet')" onmouseenter="hoverLocationByName('Xuyan (叙宴)')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">👑</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Xuyan Palace Feast (Dinner)</div>
+                            <div class="day-item-time">7:00 PM - 9:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">$57-71</div>
+                    </div>
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Return to Homestay</div>
+                            <div class="day-item-time">10:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-card" data-day="5">
+                <div class="day-header">
+                    <div class="day-title">Day 5: Wuxi Day Trip</div>
+                    <div class="day-cost">$20-25</div>
+                </div>
+                <div class="day-items">
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Start from Homestay</div>
+                            <div class="day-item-time">8:00 AM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                    <div class="day-item" data-location="Turtle Head Isle" onclick="openGoogleImages('Turtle Head Isle Wuxi')" onmouseenter="hoverLocationByName('Turtle Head Isle')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏝️</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Turtle Head Isle</div>
+                            <div class="day-item-time">10:00 AM - 1:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$15</div>
+                    </div>
+                    <div class="day-item" data-location="Qingming Bridge" onclick="openGoogleImages('Qingming Bridge Wuxi')" onmouseenter="hoverLocationByName('Qingming Bridge')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🌉</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Qingming Bridge</div>
+                            <div class="day-item-time">2:00 PM - 3:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">Free</div>
+                    </div>
+                    <div class="day-item" data-location="Bogong Island Park" onclick="openGoogleImages('Bogong Island Park Wuxi')" onmouseenter="hoverLocationByName('Bogong Island Park')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏞️</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Bogong Island Park</div>
+                            <div class="day-item-time">4:00 PM - 5:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">Free</div>
+                    </div>
+                    <div class="day-item" data-location="Yang's Dumplings" onclick="openGoogleImages('Yang Fried Dumplings Shanghai')" onmouseenter="hoverLocationByName(&quot;Yang's Dumplings&quot;)" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🥟</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Yang's Dumplings (Late dinner)</div>
+                            <div class="day-item-time">7:00 PM</div>
+                        </div>
+                        <div class="day-item-cost">$5-10</div>
+                    </div>
+                    <div class="day-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                        <div class="day-item-icon">🏠</div>
+                        <div class="day-item-content">
+                            <div class="day-item-name">Return to Homestay</div>
+                            <div class="day-item-time">8:30 PM</div>
+                        </div>
+                        <div class="day-item-cost">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-summary">
+                <h3>💰 Trip Budget Summary</h3>
+                <div class="summary-row">
+                    <span>Day 1: Classic Shanghai</span>
+                    <span>$45-75</span>
+                </div>
+                <div class="summary-row">
+                    <span>Day 2: Disney</span>
+                    <span>$155</span>
+                </div>
+                <div class="summary-row">
+                    <span>Day 3: Art & Tech</span>
+                    <span>$85-120</span>
+                </div>
+                <div class="summary-row">
+                    <span>Day 4: Imperial Feast</span>
+                    <span>$87-101</span>
+                </div>
+                <div class="summary-row">
+                    <span>Day 5: Wuxi Trip</span>
+                    <span>$20-25</span>
+                </div>
+                <div class="summary-row">
+                    <span>TOTAL (5 Days)</span>
+                    <span>$392-476</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="legend">
+        <h3>Map Guide</h3>
+        <div class="legend-item"><div class="legend-color" style="background: #667eea;"></div><span>Spots</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #f56565;"></div><span>Dining</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #ed8936;"></div><span>Food</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #9f7aea;"></div><span>Nightlife</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #48bb78;"></div><span>Shopping</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #e53e3e;"></div><span>Homestay</span></div>
+        <div class="legend-item"><div class="legend-color" style="background: #38b2ac;"></div><span>Wuxi</span></div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0;">
+            <div class="legend-item"><div class="legend-line" style="background: #ff6b6b;"></div><span>Day 1</span></div>
+            <div class="legend-item"><div class="legend-line" style="background: #4ecdc4;"></div><span>Day 2</span></div>
+            <div class="legend-item"><div class="legend-line" style="background: #45b7d1;"></div><span>Day 3</span></div>
+            <div class="legend-item"><div class="legend-line" style="background: #f9ca24;"></div><span>Day 4</span></div>
+            <div class="legend-item"><div class="legend-line" style="background: #6c5ce7;"></div><span>Day 5</span></div>
+        </div>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #718096;">
+            Hover: Details | Click: Images
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([31.2405, 121.4350], 11);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap © CartoDB',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        const colors = {
+            spots: '#667eea',
+            dining: '#f56565',
+            food: '#ed8936',
+            nightlife: '#9f7aea',
+            shopping: '#48bb78',
+            wuxi: '#38b2ac',
+            accommodation: '#e53e3e'
+        };
+
+        const dayColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+
+        const dayRoutes = [
+            ['Modena Putuo Shanghai', 'The Bund', 'Nanjing Road', 'Din Tai Fung', 'Shanghai Museum', 'Xintiandi', 'Modena Putuo Shanghai'],
+            ['Modena Putuo Shanghai', 'Shanghai Disney', 'Modena Putuo Shanghai'],
+            ['Modena Putuo Shanghai', 'teamLab Borderless', 'Natural History Museum', 'Tianzifang', 'Lost Heaven', 'The Roof', 'Modena Putuo Shanghai'],
+            ['Modena Putuo Shanghai', 'Shanghai Tower', 'Xuyan (叙宴)', 'Modena Putuo Shanghai'],
+            ['Modena Putuo Shanghai', 'Turtle Head Isle', 'Qingming Bridge', 'Bogong Island Park', "Yang's Dumplings", 'Modena Putuo Shanghai']
+        ];
+
+        const createIcon = () => {
+            return L.divIcon({
+                className: 'custom-marker',
+                html: '',
+                iconSize: [0, 0],
+                iconAnchor: [0, 0]
+            });
+        };
+
+        const locations = [
+            { name: 'Xintiandi', desc: 'Upscale dining, bars, galleries in restored Shikumen buildings', coords: [31.2195, 121.4737], category: 'spots', num: 1, icon: '🏛️' },
+            { name: 'Nanjing Road', desc: "World's longest shopping street (5.5 km), great at night", coords: [31.2354, 121.4748], category: 'spots', num: 2, icon: '🛍️' },
+            { name: 'Tianzifang', desc: 'Artsy lanes with studios, cafes and boutiques', coords: [31.2105, 121.4672], category: 'spots', num: 3, icon: '🎨' },
+            { name: 'Shanghai Museum', desc: '11 galleries - bronze, jade, ceramics, calligraphy', coords: [31.2277, 121.4754], category: 'spots', num: 4, icon: '🏺' },
+            { name: 'Shanghai Disney', desc: "China's first Disney park - TRON, Pirates, Zootopia", coords: [31.1434, 121.6677], category: 'spots', num: 5, icon: '🏰' },
+            { name: 'Jiashan Market', desc: 'Old factory turned creative park with coffee shops', coords: [31.2632, 121.4458], category: 'spots', num: 6, icon: '☕' },
+            { name: 'Circus World', desc: 'ERA show - mind-blowing acrobatics and stunts', coords: [31.2791, 121.4546], category: 'spots', num: 7, icon: '🎪' },
+            { name: 'teamLab Borderless', desc: '6,600 sqm digital art museum, 50+ interactive installations', coords: [31.2259, 121.4780], category: 'spots', num: 8, icon: '🎨' },
+            { name: 'Bund Tunnel', desc: 'Psychedelic 5-min light show under Huangpu River', coords: [31.2395, 121.4910], category: 'spots', num: 9, icon: '🌈' },
+            { name: 'Natural History Museum', desc: 'Dinosaur skeletons, mummies, nautilus-shaped building', coords: [31.2686, 121.4444], category: 'spots', num: 10, icon: '🦕' },
+            { name: 'Shanghai Tower', desc: 'Tallest building in China - observation deck at 546m', coords: [31.2335, 121.5052], category: 'spots', num: 11, icon: '🏙️' },
+            { name: 'The Bund', desc: 'Iconic waterfront with colonial architecture', coords: [31.2397, 121.4906], category: 'spots', num: 12, icon: '🌆' },
+            { name: 'Ocean Aquarium', desc: 'Underwater tunnel with Yangtze River wildlife', coords: [31.2416, 121.5006], category: 'spots', num: 13, icon: '🐠' },
+            { name: 'Starbucks Reserve', desc: "World's largest Starbucks, coffee theater experience", coords: [31.2200, 121.4750], category: 'spots', num: 14, icon: '☕' },
+
+            { name: 'Xuyan (叙宴)', desc: 'Tang Dynasty palace feast with light show • ¥398-698 ($57-99)', coords: [31.2820, 121.4442], category: 'dining', num: 15, icon: '👑' },
+            { name: 'Gong Yan (宫宴)', desc: 'Multi-dynasty banquet, photo paradise • ¥398-698 ($57-99)', coords: [31.2263, 121.4736], category: 'dining', num: 16, icon: '🏯' },
+            { name: 'Taste of China', desc: '7-course meal with 270° panoramic screens', coords: [31.2385, 121.4900], category: 'dining', num: 17, icon: '🎭' },
+            { name: 'Dining Opera', desc: 'Immersive dining with live opera performances', coords: [31.2390, 121.4905], category: 'dining', num: 18, icon: '🎵' },
+
+            { name: "Yang's Dumplings", desc: 'Famous sheng jian bao (pan-fried buns) • $3-6', coords: [31.2354, 121.4751], category: 'food', num: 19, icon: '🥟' },
+            { name: 'Din Tai Fung', desc: 'Legendary xiaolongbao (soup dumplings) • $14-21', coords: [31.2198, 121.4737], category: 'food', num: 20, icon: '🥢' },
+            { name: 'Yunnan Road', desc: 'Street food strip: skewers, wontons, dumplings • $4-11', coords: [31.2341, 121.4766], category: 'food', num: 21, icon: '🍢' },
+            { name: 'Lost Heaven', desc: 'Yunnan cuisine in French Concession • $21-35', coords: [31.2173, 121.4658], category: 'food', num: 22, icon: '🍛' },
+            { name: 'Waipo Jia', desc: "Grandma's Kitchen - homestyle Shanghainese • $10-20", coords: [31.2200, 121.4700], category: 'food', num: 23, icon: '🍜' },
+            { name: 'Jianguo 328', desc: 'Red-braised pork belly, scallion oil noodles • $10-20', coords: [31.2180, 121.4690], category: 'food', num: 24, icon: '🥩' },
+            { name: 'Guyi Hunan', desc: 'Spicy Hunan cuisine • $15-25', coords: [31.2250, 121.4720], category: 'food', num: 25, icon: '🌶️' },
+            { name: 'Wei Xiang Zhai', desc: 'Michelin-rated sesame noodles • $4', coords: [31.2300, 121.4730], category: 'food', num: 26, icon: '🍝' },
+            { name: 'Street Food', desc: 'Late night dumplings, hotpot after midnight • $3-7', coords: [31.2350, 121.4750], category: 'food', num: 27, icon: '🌙' },
+
+            { name: 'The Roof', desc: 'Rooftop garden terrace at Shanghai EDITION, lounge vibes', coords: [31.2199, 121.4732], category: 'nightlife', num: 28, icon: '🌃' },
+
+            { name: 'AP Xinyang Market', desc: 'Underground bargain market near Science Museum', coords: [31.2655, 121.4473], category: 'shopping', num: 29, icon: '🛒' },
+            { name: 'HKRI Taikoo Hui', desc: 'Modern luxury mall on Nanjing West Road', coords: [31.2307, 121.4536], category: 'shopping', num: 30, icon: '🏬' },
+
+            { name: 'Modena Putuo Shanghai', desc: 'Homestay accommodation in Putuo district', coords: [31.2506, 121.3956], category: 'accommodation', num: 31, icon: '🏠' },
+
+            { name: 'Turtle Head Isle', desc: 'Scenic peninsula on Taihu Lake', coords: [31.5238, 120.2208], category: 'wuxi', num: 32, icon: '🏝️' },
+            { name: 'Qingming Bridge', desc: 'Ancient canal bridge and historic area', coords: [31.5656, 120.2972], category: 'wuxi', num: 33, icon: '🌉' },
+            { name: 'Bogong Island Park', desc: 'Waterfront park on Taihu Lake islands', coords: [31.5344, 120.2589], category: 'wuxi', num: 34, icon: '🏞️' }
+        ];
+
+        const markers = {};
+        const routeLines = [];
+        const locationNameToIndex = {};
+        let currentView = 'itinerary';
+        let currentDayFilter = 'all';
+
+        // Map location names to their day
+        const locationToDay = {
+            'The Bund': 1, 'Nanjing Road': 1, 'Din Tai Fung': 1, 'Shanghai Museum': 1, 'Xintiandi': 1,
+            'Shanghai Disney': 2,
+            'teamLab Borderless': 3, 'Natural History Museum': 3, 'Tianzifang': 3, 'Lost Heaven': 3, 'The Roof': 3,
+            'Shanghai Tower': 4, 'Xuyan (叙宴)': 4,
+            'Turtle Head Isle': 5, 'Qingming Bridge': 5, 'Bogong Island Park': 5, "Yang's Dumplings": 5
+        };
+
+        // Build location name index
+        locations.forEach((loc, idx) => {
+            locationNameToIndex[loc.name] = idx;
+        });
+
+        function highlightDayItem(locationName) {
+            document.querySelectorAll('.day-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            const item = document.querySelector(`[data-location="${locationName}"]`);
+            if (item) {
+                item.classList.add('highlight');
+                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function unhighlightDayItem() {
+            document.querySelectorAll('.day-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+        }
+
+        function hoverLocationByName(locationName) {
+            const idx = locationNameToIndex[locationName];
+            if (idx !== undefined) {
+                const loc = locations[idx];
+                map.setView(loc.coords, 14, { animate: true });
+                const popup = L.popup({
+                    closeButton: false,
+                    autoClose: true,
+                    closeOnClick: false,
+                    offset: [0, -10]
+                }).setLatLng(loc.coords).setContent(`
+                    <div class="popup-content">
+                        <div class="popup-title">#${loc.num} ${loc.name}</div>
+                        <div class="popup-desc">${loc.desc}</div>
+                        <div class="popup-action">Click to see images →</div>
+                    </div>
+                `).openOn(map);
+            }
+        }
+
+        function unhoverLocation() {
+            map.closePopup();
+        }
+
+        function openGoogleImages(locationName) {
+            const searchQuery = encodeURIComponent(locationName);
+            window.open(`https://www.google.com/search?q=${searchQuery}&udm=2`, '_blank');
+        }
+
+        locations.forEach((loc, idx) => {
+            const marker = L.marker(loc.coords, {
+                icon: createIcon()
+            }).addTo(map);
+
+            const tooltip = marker.bindTooltip(loc.name, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, 0],
+                className: 'leaflet-tooltip'
+            });
+
+            const tooltipElement = tooltip.getTooltip().getElement();
+
+            // Add event listeners to tooltip element
+            if (tooltipElement) {
+                tooltipElement.addEventListener('mouseenter', () => {
+                    highlightDayItem(loc.name);
+                    const popup = L.popup({
+                        closeButton: false,
+                        autoClose: true,
+                        closeOnClick: false,
+                        offset: [0, -10]
+                    }).setLatLng(loc.coords).setContent(`
+                        <div class="popup-content">
+                            <div class="popup-title">#${loc.num} ${loc.name}</div>
+                            <div class="popup-desc">${loc.desc}</div>
+                            <div class="popup-action">Click to see images →</div>
+                        </div>
+                    `).openOn(map);
+                });
+
+                tooltipElement.addEventListener('mouseleave', () => {
+                    unhighlightDayItem();
+                    map.closePopup();
+                });
+
+                tooltipElement.addEventListener('click', () => {
+                    openGoogleImages(loc.name);
+                });
+            }
+
+            markers[idx] = marker;
+        });
+
+        // Draw route lines for each day
+        function drawRoutes() {
+            // Clear existing routes
+            routeLines.forEach(line => map.removeLayer(line));
+            routeLines.length = 0;
+
+            if (currentView !== 'itinerary') return;
+
+            dayRoutes.forEach((route, dayIdx) => {
+                // Skip if filtering by specific day
+                if (currentDayFilter !== 'all' && dayIdx + 1 !== currentDayFilter) {
+                    return;
+                }
+
+                const coords = route.map(name => {
+                    const loc = locations.find(l => l.name === name);
+                    return loc ? loc.coords : null;
+                }).filter(c => c !== null);
+
+                if (coords.length > 1) {
+                    const polyline = L.polyline(coords, {
+                        color: dayColors[dayIdx],
+                        weight: 4,
+                        opacity: 0.7,
+                        smoothFactor: 1
+                    }).addTo(map);
+                    routeLines.push(polyline);
+                }
+            });
+        }
+
+        function filterDay(day) {
+            currentDayFilter = day;
+
+            // Update button states
+            document.querySelectorAll('.day-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide day cards
+            document.querySelectorAll('.day-card').forEach(card => {
+                if (day === 'all' || parseInt(card.dataset.day) === day) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Show/hide location labels on map
+            locations.forEach((loc, idx) => {
+                const marker = markers[idx];
+
+                // Always show homestay since it's used on all days
+                if (day === 'all' || locationToDay[loc.name] === day || loc.category === 'accommodation') {
+                    map.addLayer(marker);
+                } else {
+                    map.removeLayer(marker);
+                }
+            });
+
+            // Redraw routes
+            drawRoutes();
+
+            // Fit map to visible locations if filtering by day
+            if (day !== 'all') {
+                const visibleCoords = locations
+                    .filter(loc => locationToDay[loc.name] === day)
+                    .map(loc => loc.coords);
+                if (visibleCoords.length > 0) {
+                    const bounds = L.latLngBounds(visibleCoords);
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
+            } else {
+                const bounds = L.latLngBounds(locations.map(loc => loc.coords));
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+
+        drawRoutes();
+        const bounds = L.latLngBounds(locations.map(loc => loc.coords));
+        map.fitBounds(bounds, { padding: [50, 50] });
+    </script>
+</body>
+</html>

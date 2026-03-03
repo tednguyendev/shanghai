@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>China Trip - Shanghai &amp; Wuxi</name>
+  <description>All places to visit in Shanghai and Wuxi</description>
+
+  <!-- Shanghai Spots -->
+  <Folder>
+    <name>Shanghai - Spots</name>
+    <Placemark>
+      <name>Xintiandi</name>
+      <description>Upscale dining, bars, galleries in restored Shikumen buildings</description>
+      <Point><coordinates>121.4737,31.2195,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Nanjing Road</name>
+      <description>World's longest shopping street (5.5 km)</description>
+      <Point><coordinates>121.4748,31.2354,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Tianzifang</name>
+      <description>Artsy lanes with studios, cafes, boutiques</description>
+      <Point><coordinates>121.4672,31.2105,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Museum</name>
+      <description>11 galleries - bronze, jade, ceramics, calligraphy</description>
+      <Point><coordinates>121.4754,31.2277,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Disney Resort</name>
+      <description>Mainland China's first Disney park</description>
+      <Point><coordinates>121.6677,31.1434,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Zhujiajiao Ancient Water Town</name>
+      <description>Venice of Shanghai, 1,700+ years old</description>
+      <Point><coordinates>121.0544,31.1126,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Jiashan Market</name>
+      <description>Old factory turned creative park</description>
+      <Point><coordinates>121.4458,31.2632,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Circus World (ERA show)</name>
+      <description>Acrobat show, insane stunts</description>
+      <Point><coordinates>121.4546,31.2791,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>teamLab Borderless Shanghai</name>
+      <description>6,600 sqm digital art museum, 50+ interactive installations</description>
+      <Point><coordinates>121.4780,31.2259,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Bund Sightseeing Tunnel</name>
+      <description>Psychedelic 5-min light show tunnel</description>
+      <Point><coordinates>121.4910,31.2395,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Natural History Museum</name>
+      <description>Dinosaur skeletons, mummies, nautilus building</description>
+      <Point><coordinates>121.4444,31.2686,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Tower</name>
+      <description>Tallest building in China, observation deck at 546m</description>
+      <Point><coordinates>121.5052,31.2335,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>The Bund</name>
+      <description>Iconic waterfront, colonial architecture</description>
+      <Point><coordinates>121.4906,31.2397,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Shanghai Ocean Aquarium</name>
+      <description>Underwater tunnel, Yangtze River wildlife</description>
+      <Point><coordinates>121.5006,31.2416,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Starbucks Reserve Roastery</name>
+      <description>World's largest Starbucks, coffee theater</description>
+      <Point><coordinates>121.4750,31.2200,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- Shanghai Immersive Dining -->
+  <Folder>
+    <name>Shanghai - Immersive Dining</name>
+    <Placemark>
+      <name>Xuyan (叙宴)</name>
+      <description>Tang Dynasty palace feast. ¥398-698. Near Wenshui Rd Metro</description>
+      <Point><coordinates>121.4442,31.2820,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Gong Yan (宫宴)</name>
+      <description>Multi-dynasty palace banquet. ¥398-698. Oriental Art Palace</description>
+      <Point><coordinates>121.4736,31.2263,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Taste of China</name>
+      <description>Tech-forward immersive dining with 270° screens. The Bund</description>
+      <Point><coordinates>121.4900,31.2385,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- Shanghai Food -->
+  <Folder>
+    <name>Shanghai - Food</name>
+    <Placemark>
+      <name>Yang's Fried Dumplings</name>
+      <description>Famous sheng jian bao, ~$3-6/person</description>
+      <Point><coordinates>121.4751,31.2354,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Din Tai Fung</name>
+      <description>Legendary xiaolongbao, ~$14-21/person</description>
+      <Point><coordinates>121.4737,31.2198,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Yunnan Road Food Street</name>
+      <description>Street food strip: skewers, wontons, dumplings</description>
+      <Point><coordinates>121.4766,31.2341,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Lost Heaven</name>
+      <description>Yunnan cuisine in French Concession, ~$21-35/person</description>
+      <Point><coordinates>121.4658,31.2173,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- Shanghai Nightlife -->
+  <Folder>
+    <name>Shanghai - Nightlife</name>
+    <Placemark>
+      <name>The Roof (Shanghai EDITION)</name>
+      <description>Ivy-covered garden terrace, lounge vibes</description>
+      <Point><coordinates>121.4732,31.2199,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- Shanghai Shopping -->
+  <Folder>
+    <name>Shanghai - Shopping</name>
+    <Placemark>
+      <name>AP Xinyang Fashion Market</name>
+      <description>Underground bargain market near Science Museum</description>
+      <Point><coordinates>121.4473,31.2655,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>HKRI Taikoo Hui</name>
+      <description>Modern mall, Nanjing West Road</description>
+      <Point><coordinates>121.4536,31.2307,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+  <!-- Wuxi Spots -->
+  <Folder>
+    <name>Wuxi - Spots</name>
+    <Placemark>
+      <name>Turtle Head Isle</name>
+      <description>Scenic peninsula on Taihu Lake</description>
+      <Point><coordinates>120.2208,31.5238,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Qingming Bridge</name>
+      <description>Ancient canal bridge and historic area</description>
+      <Point><coordinates>120.2972,31.5656,0</coordinates></Point>
+    </Placemark>
+    <Placemark>
+      <name>Pingjiang Road</name>
+      <description>Historic canal street in Suzhou (near Wuxi)</description>
+      <Point><coordinates>120.6275,31.3177,0</coordinates></Point>
+    </Placemark>
+  </Folder>
+
+</Document>
+</kml>
