@@ -60,7 +60,8 @@
             transition: all 0.2s;
             border: 1px solid #e2e8f0;
         }
-        .place-item:hover {
+        .place-item:hover,
+        .place-item.highlighted {
             background: #edf2f7;
             transform: translateX(3px);
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
@@ -568,6 +569,23 @@
             map.closePopup();
         }
 
+        function highlightSidebarItem(locationName) {
+            const allItems = document.querySelectorAll('.place-item');
+            allItems.forEach(item => {
+                if (item.getAttribute('data-location') === locationName) {
+                    item.classList.add('highlighted');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    item.classList.remove('highlighted');
+                }
+            });
+        }
+
+        function unhighlightSidebarItems() {
+            const allItems = document.querySelectorAll('.place-item');
+            allItems.forEach(item => item.classList.remove('highlighted'));
+        }
+
         function openGoogleImages(locationName) {
             const searchQuery = encodeURIComponent(locationName);
             window.open(`https://www.google.com/search?q=${searchQuery}&udm=2`, '_blank');
@@ -589,6 +607,7 @@
 
             if (tooltipElement) {
                 tooltipElement.addEventListener('mouseenter', () => {
+                    highlightSidebarItem(loc.name);
                     const popup = L.popup({
                         closeButton: false,
                         autoClose: true,
@@ -604,6 +623,7 @@
                 });
 
                 tooltipElement.addEventListener('mouseleave', () => {
+                    unhighlightSidebarItems();
                     map.closePopup();
                 });
 
