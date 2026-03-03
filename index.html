@@ -49,6 +49,22 @@
         .places-list {
             padding: 10px;
         }
+        .location-section {
+            margin-bottom: 15px;
+        }
+        .location-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2d3748;
+            padding: 12px 12px 8px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #667eea 0%, transparent 100%);
+            background-size: 3px 100%;
+            background-repeat: no-repeat;
+            background-position: left center;
+            padding-left: 15px;
+        }
         .place-item {
             display: flex;
             align-items: center;
@@ -218,17 +234,19 @@
         </div>
 
         <div class="places-list">
-            <div class="place-item" data-location="The Bund" onclick="openGoogleImages('The Bund Shanghai')" onmouseenter="hoverLocationByName('The Bund')" onmouseleave="unhoverLocation()">
-                <div class="place-icon">🏛️</div>
-                <div class="place-content">
-                    <div class="place-name">The Bund</div>
-                    <div class="place-desc">Iconic waterfront with colonial architecture</div>
+            <div class="location-section">
+                <div class="location-header">Shanghai (14)</div>
+                <div class="place-item" data-location="The Bund" onclick="openGoogleImages('The Bund Shanghai')" onmouseenter="hoverLocationByName('The Bund')" onmouseleave="unhoverLocation()">
+                    <div class="place-icon">🏛️</div>
+                    <div class="place-content">
+                        <div class="place-name">The Bund</div>
+                        <div class="place-desc">Iconic waterfront with colonial architecture</div>
+                    </div>
+                    <div class="place-meta">
+                        <div class="place-cost">Free</div>
+                        <div class="place-duration">2 hrs</div>
+                    </div>
                 </div>
-                <div class="place-meta">
-                    <div class="place-cost">Free</div>
-                    <div class="place-duration">2 hrs</div>
-                </div>
-            </div>
             <div class="place-item" data-location="Nanjing Road" onclick="openGoogleImages('Nanjing Road Shanghai')" onmouseenter="hoverLocationByName('Nanjing Road')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🛍️</div>
                 <div class="place-content">
@@ -361,8 +379,23 @@
                     <div class="place-duration">2-2.5 hrs</div>
                 </div>
             </div>
-            <div class="place-item" data-location="Turtle Head Isle" onclick="openGoogleImages('Turtle Head Isle Wuxi')" onmouseenter="hoverLocationByName('Turtle Head Isle')" onmouseleave="unhoverLocation()">
-                <div class="place-icon">🏝️</div>
+            <div class="place-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🏠</div>
+                <div class="place-content">
+                    <div class="place-name">Modena Putuo (Homestay)</div>
+                    <div class="place-desc">Shanghai accommodation base</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">-</div>
+                    <div class="place-duration">-</div>
+                </div>
+            </div>
+            </div>
+
+            <div class="location-section">
+                <div class="location-header">Wuxi (5)</div>
+                <div class="place-item" data-location="Turtle Head Isle" onclick="openGoogleImages('Turtle Head Isle Wuxi')" onmouseenter="hoverLocationByName('Turtle Head Isle')" onmouseleave="unhoverLocation()">
+                    <div class="place-icon">🏝️</div>
                 <div class="place-content">
                     <div class="place-name">Turtle Head Isle (Wuxi)</div>
                     <div class="place-desc">Scenic peninsula on Taihu Lake</div>
@@ -416,8 +449,12 @@
                     <div class="place-duration">1-1.5 hrs</div>
                 </div>
             </div>
-            <div class="place-item" data-location="West Lake" onclick="openGoogleImages('West Lake Hangzhou Xi Hu')" onmouseenter="hoverLocationByName('West Lake')" onmouseleave="unhoverLocation()">
-                <div class="place-icon">🏞️</div>
+            </div>
+
+            <div class="location-section">
+                <div class="location-header">Hangzhou (4)</div>
+                <div class="place-item" data-location="West Lake" onclick="openGoogleImages('West Lake Hangzhou Xi Hu')" onmouseenter="hoverLocationByName('West Lake')" onmouseleave="unhoverLocation()">
+                    <div class="place-icon">🏞️</div>
                 <div class="place-content">
                     <div class="place-name">West Lake (Hangzhou)</div>
                     <div class="place-desc">UNESCO World Heritage, scenic wonder</div>
@@ -460,16 +497,6 @@
                     <div class="place-duration">2-3 hrs</div>
                 </div>
             </div>
-            <div class="place-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
-                <div class="place-icon">🏠</div>
-                <div class="place-content">
-                    <div class="place-name">Modena Putuo (Homestay)</div>
-                    <div class="place-desc">Shanghai accommodation base</div>
-                </div>
-                <div class="place-meta">
-                    <div class="place-cost">-</div>
-                    <div class="place-duration">-</div>
-                </div>
             </div>
         </div>
     </div>
@@ -549,7 +576,7 @@
             const idx = locationNameToIndex[locationName];
             if (idx !== undefined) {
                 const loc = locations[idx];
-                map.setView(loc.coords, 14, { animate: true });
+                map.setView(loc.coords, 12, { animate: true });
                 const popup = L.popup({
                     closeButton: false,
                     autoClose: true,
