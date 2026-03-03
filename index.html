@@ -128,6 +128,60 @@
             flex: 1;
             height: 100vh;
         }
+        .right-pane {
+            width: 350px;
+            height: 100vh;
+            background: #f7fafc;
+            overflow-y: auto;
+            border-left: 2px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .right-pane-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 20px;
+            z-index: 10;
+        }
+        .right-pane-header h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .right-pane-header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .todo-list {
+            padding: 15px;
+        }
+        .todo-section {
+            margin-bottom: 20px;
+        }
+        .todo-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #48bb78;
+        }
+        .todo-item {
+            background: white;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        .todo-item::before {
+            content: '☐ ';
+            color: #48bb78;
+            font-size: 16px;
+            margin-right: 8px;
+        }
         .toggle-sidebar-btn {
             position: absolute;
             top: 20px;
@@ -470,6 +524,24 @@
 
     <div id="map">
         <button class="toggle-sidebar-btn" onclick="toggleSidebar()">☰ Hide Places</button>
+    </div>
+
+    <div class="right-pane">
+        <div class="right-pane-header">
+            <h2>📋 Planning Tasks</h2>
+            <p>Things to research & organize</p>
+        </div>
+        <div class="todo-list">
+            <div class="todo-section">
+                <h3>To Research</h3>
+                <div class="todo-item">Find out the exact commute between places</div>
+                <div class="todo-item">Find places to eat</div>
+                <div class="todo-item">Find at least 2 street food spots in Shanghai</div>
+                <div class="todo-item">Find at least 1 street food spot in Wuxi</div>
+                <div class="todo-item">Places to stay in Wuxi</div>
+                <div class="todo-item">Research Disneyland</div>
+            </div>
+        </div>
     </div>
 
     <div class="legend">
