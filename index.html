@@ -64,6 +64,12 @@
             background-repeat: no-repeat;
             background-position: left center;
             padding-left: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .location-header:hover {
+            background-color: #edf2f7;
+            padding-left: 18px;
         }
         .place-item {
             display: flex;
@@ -278,22 +284,57 @@
             color: #667eea;
             font-style: italic;
         }
+        .location-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .location-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .location-tab:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .location-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
             <h1>🗺️ Shanghai, Wuxi & Hangzhou</h1>
-            <p>20 Places to Explore</p>
+            <p>34 Places to Explore</p>
+        </div>
+
+        <div class="location-tabs">
+            <div class="location-tab" onclick="zoomToCity('shanghai')">Shanghai</div>
+            <div class="location-tab" onclick="zoomToCity('hangzhou')">Hangzhou</div>
+            <div class="location-tab" onclick="zoomToCity('wuxi')">Wuxi</div>
         </div>
 
         <div class="places-list">
             <div class="location-section">
-                <div class="location-header">Shanghai (12)</div>
+                <div class="location-header" onclick="zoomToCity('shanghai')">Shanghai (20)</div>
                 <div class="place-item" data-location="The Bund" onclick="openGoogleImages('The Bund Shanghai')" onmouseenter="hoverLocationByName('The Bund')" onmouseleave="unhoverLocation()">
                     <div class="place-icon">🏛️</div>
                     <div class="place-content">
-                        <div class="place-name">The Bund</div>
+                        <div class="place-name">Spot: The Bund</div>
                         <div class="place-desc">Iconic waterfront with colonial architecture</div>
                     </div>
                     <div class="place-meta">
@@ -304,7 +345,7 @@
             <div class="place-item" data-location="Nanjing Road" onclick="openGoogleImages('Nanjing Road Shanghai')" onmouseenter="hoverLocationByName('Nanjing Road')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🛍️</div>
                 <div class="place-content">
-                    <div class="place-name">Nanjing Road</div>
+                    <div class="place-name">Spot: Nanjing Road</div>
                     <div class="place-desc">World's longest shopping street (5.5 km)</div>
                 </div>
                 <div class="place-meta">
@@ -315,7 +356,7 @@
             <div class="place-item" data-location="Shanghai Museum" onclick="openGoogleImages('Shanghai Museum')" onmouseenter="hoverLocationByName('Shanghai Museum')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏺</div>
                 <div class="place-content">
-                    <div class="place-name">Shanghai Museum</div>
+                    <div class="place-name">Museum: Shanghai Museum</div>
                     <div class="place-desc">Ancient bronzes, ceramics, calligraphy</div>
                 </div>
                 <div class="place-meta">
@@ -326,7 +367,7 @@
             <div class="place-item" data-location="Xintiandi" onclick="openGoogleImages('Xintiandi Shanghai')" onmouseenter="hoverLocationByName('Xintiandi')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🍜</div>
                 <div class="place-content">
-                    <div class="place-name">Xintiandi</div>
+                    <div class="place-name">Food: Xintiandi</div>
                     <div class="place-desc">Upscale dining & bars in Shikumen buildings</div>
                 </div>
                 <div class="place-meta">
@@ -337,7 +378,7 @@
             <div class="place-item" data-location="Shanghai Disney" onclick="openGoogleImages('Shanghai Disney Resort')" onmouseenter="hoverLocationByName('Shanghai Disney')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏰</div>
                 <div class="place-content">
-                    <div class="place-name">Shanghai Disney Resort</div>
+                    <div class="place-name">Spot: Shanghai Disney Resort</div>
                     <div class="place-desc">TRON, Pirates, Zootopia themed park</div>
                 </div>
                 <div class="place-meta">
@@ -348,7 +389,7 @@
             <div class="place-item" data-location="teamLab Borderless" onclick="openGoogleImages('teamLab Borderless Shanghai')" onmouseenter="hoverLocationByName('teamLab Borderless')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🎨</div>
                 <div class="place-content">
-                    <div class="place-name">teamLab Borderless</div>
+                    <div class="place-name">Museum: teamLab Borderless</div>
                     <div class="place-desc">6,600 sqm digital art museum</div>
                 </div>
                 <div class="place-meta">
@@ -359,7 +400,7 @@
             <div class="place-item" data-location="Natural History Museum" onclick="openGoogleImages('Shanghai Natural History Museum')" onmouseenter="hoverLocationByName('Natural History Museum')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🦕</div>
                 <div class="place-content">
-                    <div class="place-name">Natural History Museum</div>
+                    <div class="place-name">Museum: Natural History Museum</div>
                     <div class="place-desc">Real dinosaur fossils, 26m Mamenchisaurus</div>
                 </div>
                 <div class="place-meta">
@@ -370,7 +411,7 @@
             <div class="place-item" data-location="Science & Technology Museum" onclick="openGoogleImages('Shanghai Science Technology Museum')" onmouseenter="hoverLocationByName('Science & Technology Museum')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🔬</div>
                 <div class="place-content">
-                    <div class="place-name">Science & Technology Museum</div>
+                    <div class="place-name">Museum: Science & Technology Museum</div>
                     <div class="place-desc">Interactive exhibits, robotics, space</div>
                 </div>
                 <div class="place-meta">
@@ -381,7 +422,7 @@
             <div class="place-item" data-location="Tianzifang" onclick="openGoogleImages('Tianzifang Shanghai')" onmouseenter="hoverLocationByName('Tianzifang')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🎭</div>
                 <div class="place-content">
-                    <div class="place-name">Tianzifang</div>
+                    <div class="place-name">Spot: Tianzifang</div>
                     <div class="place-desc">Artsy lanes with studios & boutiques</div>
                 </div>
                 <div class="place-meta">
@@ -392,7 +433,7 @@
             <div class="place-item" data-location="Shanghai Tower" onclick="openGoogleImages('Shanghai Tower')" onmouseenter="hoverLocationByName('Shanghai Tower')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏙️</div>
                 <div class="place-content">
-                    <div class="place-name">Shanghai Tower</div>
+                    <div class="place-name">Spot: Shanghai Tower</div>
                     <div class="place-desc">3rd tallest building - 546m observation deck</div>
                 </div>
                 <div class="place-meta">
@@ -403,7 +444,7 @@
             <div class="place-item" data-location="Xuyan (叙宴)" onclick="openGoogleImages('Xuyan Shanghai palace banquet')" onmouseenter="hoverLocationByName('Xuyan (叙宴)')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">👑</div>
                 <div class="place-content">
-                    <div class="place-name">Xuyan Palace Feast</div>
+                    <div class="place-name">Food: Xuyan Palace Feast</div>
                     <div class="place-desc">Tang Dynasty banquet with light show</div>
                 </div>
                 <div class="place-meta">
@@ -411,25 +452,124 @@
                     <div class="place-duration">2-2.5 hrs</div>
                 </div>
             </div>
+            <div class="place-item" data-location="Huanghe Road" onclick="openGoogleImages('Huanghe Road Food Street Shanghai')" onmouseenter="hoverLocationByName('Huanghe Road')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🥟</div>
+                <div class="place-content">
+                    <div class="place-name">Food: Huanghe Road Food Street</div>
+                    <div class="place-desc">Sheng jian bao + xiaolongbao (Yang's, Jia Jia)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$5-10</div>
+                    <div class="place-duration">1-2 hrs</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Chenghuangmiao Street Food" onclick="openGoogleImages('Chenghuangmiao Yuyuan street food Shanghai')" onmouseenter="hoverLocationByName('Chenghuangmiao Street Food')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🥟</div>
+                <div class="place-content">
+                    <div class="place-name">Food: Chenghuangmiao Street Food</div>
+                    <div class="place-desc">Crab shell cake, tanghulu, local snacks</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$5-15</div>
+                    <div class="place-duration">1-2 hrs</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Qi Bao Old Street" onclick="openGoogleImages('Qi Bao Old Street Shanghai street food')" onmouseenter="hoverLocationByName('Qi Bao Old Street')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🥟</div>
+                <div class="place-content">
+                    <div class="place-name">Food: Qi Bao Old Street</div>
+                    <div class="place-desc">Tanghulu, stinky tofu, ancient water town</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$5-15</div>
+                    <div class="place-duration">2-3 hrs</div>
+                </div>
+            </div>
             <div class="place-item" data-location="Modena Putuo Shanghai" onclick="openGoogleImages('Modena Putuo Shanghai')" onmouseenter="hoverLocationByName('Modena Putuo Shanghai')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏠</div>
                 <div class="place-content">
                     <div class="place-name">Modena Putuo (Homestay)</div>
-                    <div class="place-desc">Shanghai accommodation base</div>
+                    <div class="place-desc">Walk 10min to Zhenru Station Line 11</div>
                 </div>
                 <div class="place-meta">
-                    <div class="place-cost">-</div>
-                    <div class="place-duration">-</div>
+                    <div class="place-cost">Free</div>
+                    <div class="place-duration">10 min</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Zhenru Station" onclick="openGoogleImages('Zhenru Metro Station Shanghai Line 11')" onmouseenter="hoverLocationByName('Zhenru Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚇</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Zhenru (Line 11 Start)</div>
+                    <div class="place-desc">10min walk from homestay, take Line 11 here</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">Free</div>
+                    <div class="place-duration">10 min</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Jiangsu Road Station" onclick="openGoogleImages('Jiangsu Road Metro Station Shanghai')" onmouseenter="hoverLocationByName('Jiangsu Road Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚇</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Jiangsu Road (Line 11→2 Transfer)</div>
+                    <div class="place-desc">From Putuo Line 11, transfer to Line 2 here</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$1</div>
+                    <div class="place-duration">15 min</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="People's Square Station" onclick="openGoogleImages('People\'s Square Metro Station Shanghai')" onmouseenter="hoverLocationByName('People\'s Square Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚇</div>
+                <div class="place-content">
+                    <div class="place-name">Station: People's Square → Shanghai Center</div>
+                    <div class="place-desc">Line 2 from Jiangsu Road (15min more)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$1</div>
+                    <div class="place-duration">30-40 min</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Shanghai West Station" onclick="openGoogleImages('Shanghai West Railway Station')" onmouseenter="hoverLocationByName('Shanghai West Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚄</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Shanghai West → Wuxi</div>
+                    <div class="place-desc">Near Putuo homestay, 28min to Wuxi (255 trains/day)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$4</div>
+                    <div class="place-duration">28 min</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Shanghai Hongqiao Station" onclick="openGoogleImages('Shanghai Hongqiao Railway Station')" onmouseenter="hoverLocationByName('Shanghai Hongqiao Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚄</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Shanghai Hongqiao → Hangzhou/Wuxi</div>
+                    <div class="place-desc">Main hub: 45min to Hangzhou, 30min to Wuxi</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$4-70</div>
+                    <div class="place-duration">30-45 min</div>
                 </div>
             </div>
             </div>
 
             <div class="location-section">
-                <div class="location-header">Wuxi (4)</div>
+                <div class="location-header" onclick="zoomToCity('wuxi')">Wuxi (9)</div>
+                <div class="place-item" data-location="Turtle Head Isle" onclick="openGoogleImages('Turtle Head Isle Wuxi')" onmouseenter="hoverLocationByName('Turtle Head Isle')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🏝️</div>
+                <div class="place-content">
+                    <div class="place-name">Spot: Turtle Head Isle (Wuxi)</div>
+                    <div class="place-desc">Scenic peninsula on Taihu Lake, great for biking</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$15</div>
+                    <div class="place-duration">2-3 hrs</div>
+                </div>
+            </div>
                 <div class="place-item" data-location="Qingming Bridge" onclick="openGoogleImages('Qingming Bridge Wuxi')" onmouseenter="hoverLocationByName('Qingming Bridge')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🌉</div>
                 <div class="place-content">
-                    <div class="place-name">Qingming Bridge (Wuxi)</div>
+                    <div class="place-name">Spot: Qingming Bridge (Wuxi)</div>
                     <div class="place-desc">Ancient canal bridge and historic area</div>
                 </div>
                 <div class="place-meta">
@@ -440,7 +580,7 @@
             <div class="place-item" data-location="Bogong Island Park" onclick="openGoogleImages('Bogong Island Park Wuxi')" onmouseenter="hoverLocationByName('Bogong Island Park')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🏞️</div>
                 <div class="place-content">
-                    <div class="place-name">Bogong Island Park (Wuxi)</div>
+                    <div class="place-name">Spot: Bogong Island Park (Wuxi)</div>
                     <div class="place-desc">Waterfront park on Taihu Lake islands</div>
                 </div>
                 <div class="place-meta">
@@ -451,7 +591,7 @@
             <div class="place-item" data-location="Well wells" onclick="openGoogleImages('Well wells Wuxi')" onmouseenter="hoverLocationByName('Well wells')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">☕</div>
                 <div class="place-content">
-                    <div class="place-name">Well wells (Wuxi)</div>
+                    <div class="place-name">Drink: Well wells (Wuxi)</div>
                     <div class="place-desc">Trendy cafe and art space</div>
                 </div>
                 <div class="place-meta">
@@ -462,7 +602,7 @@
             <div class="place-item" data-location="Yourway taproom" onclick="openGoogleImages('Yourway taproom Wuxi')" onmouseenter="hoverLocationByName('Yourway taproom')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🍺</div>
                 <div class="place-content">
-                    <div class="place-name">Yourway Taproom (Wuxi)</div>
+                    <div class="place-name">Drink: Yourway Taproom (Wuxi)</div>
                     <div class="place-desc">Craft brewery with local beers</div>
                 </div>
                 <div class="place-meta">
@@ -470,14 +610,69 @@
                     <div class="place-duration">1-1.5 hrs</div>
                 </div>
             </div>
+            <div class="place-item" data-location="Nanchan Temple Food Street" onclick="openGoogleImages('Nanchan Temple Food Street Wuxi')" onmouseenter="hoverLocationByName('Nanchan Temple Food Street')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🥟</div>
+                <div class="place-content">
+                    <div class="place-name">Food: Nanchan Temple Food Street (Wuxi)</div>
+                    <div class="place-desc">Wuxi soup dumplings, hand-pulled noodles, local snacks</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$5-15</div>
+                    <div class="place-duration">1-2 hrs</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Pegasus Water City" onclick="openGoogleImages('Pegasus Water City Wuxi Jiangyin')" onmouseenter="hoverLocationByName('Pegasus Water City')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🐴</div>
+                <div class="place-content">
+                    <div class="place-name">Spot: Pegasus Water City (Wuxi)</div>
+                    <div class="place-desc">Venice-style water town with horse shows</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">Free</div>
+                    <div class="place-duration">2-3 hrs</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="GreenTree Inn Wuxi" onclick="openGoogleImages('GreenTree Inn Wuxi Nanchang Walking Street')" onmouseenter="hoverLocationByName('GreenTree Inn Wuxi')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🏠</div>
+                <div class="place-content">
+                    <div class="place-name">GreenTree Inn (Homestay)</div>
+                    <div class="place-desc">Wuxi Nanchang Walking Street accommodation</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">-</div>
+                    <div class="place-duration">-</div>
+                </div>
+            </div>
+            <div class="place-item" data-location="Wuxi Station" onclick="openGoogleImages('Wuxi Railway Station')" onmouseenter="hoverLocationByName('Wuxi Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚄</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Wuxi ← Shanghai</div>
+                    <div class="place-desc">Main arrival from Shanghai (28-60min, $4)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$4</div>
+                    <div class="place-duration">28-60 min</div>
+                </div>
+            </div>
             </div>
 
             <div class="location-section">
-                <div class="location-header">Hangzhou (4)</div>
+                <div class="location-header" onclick="zoomToCity('hangzhou')">Hangzhou (5)</div>
+                <div class="place-item" data-location="Hangzhou East Station" onclick="openGoogleImages('Hangzhou East Railway Station')" onmouseenter="hoverLocationByName('Hangzhou East Station')" onmouseleave="unhoverLocation()">
+                <div class="place-icon">🚄</div>
+                <div class="place-content">
+                    <div class="place-name">Station: Hangzhou East ← Shanghai</div>
+                    <div class="place-desc">Main arrival from Shanghai (45min-2hr, $4-70)</div>
+                </div>
+                <div class="place-meta">
+                    <div class="place-cost">$4-70</div>
+                    <div class="place-duration">45min-2hr</div>
+                </div>
+            </div>
                 <div class="place-item" data-location="Meijiawu Tea Village" onclick="openGoogleImages('Meijiawu Tea Village Hangzhou')" onmouseenter="hoverLocationByName('Meijiawu Tea Village')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🍵</div>
                 <div class="place-content">
-                    <div class="place-name">Meijiawu Tea Village (Hangzhou)</div>
+                    <div class="place-name">Spot: Meijiawu Tea Village (Hangzhou)</div>
                     <div class="place-desc">Longjing Dragon Well tea plantations</div>
                 </div>
                 <div class="place-meta">
@@ -488,7 +683,7 @@
             <div class="place-item" data-location="Xixi Wetland" onclick="openGoogleImages('Xixi Wetland Hangzhou')" onmouseenter="hoverLocationByName('Xixi Wetland')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🦆</div>
                 <div class="place-content">
-                    <div class="place-name">Xixi Wetland (Hangzhou)</div>
+                    <div class="place-name">Spot: Xixi Wetland (Hangzhou)</div>
                     <div class="place-desc">National wetland park, waterways & bike paths</div>
                 </div>
                 <div class="place-meta">
@@ -499,7 +694,7 @@
             <div class="place-item" data-location="Moj Matcha" onclick="openGoogleImages('Moj Matcha Hangzhou Xixi')" onmouseenter="hoverLocationByName('Moj Matcha')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🍵</div>
                 <div class="place-content">
-                    <div class="place-name">Moj Matcha (Hangzhou)</div>
+                    <div class="place-name">Drink: Moj Matcha (Hangzhou)</div>
                     <div class="place-desc">Matcha café near Xixi Wetland</div>
                 </div>
                 <div class="place-meta">
@@ -510,7 +705,7 @@
             <div class="place-item" data-location="Qingshan Lake Wetland" onclick="openGoogleImages('Qingshan Lake Wetland Hangzhou Matcha Lake 青山沼泽')" onmouseenter="hoverLocationByName('Qingshan Lake Wetland')" onmouseleave="unhoverLocation()">
                 <div class="place-icon">🌿</div>
                 <div class="place-content">
-                    <div class="place-name">Qingshan Lake Wetland (Hangzhou)</div>
+                    <div class="place-name">Spot: Qingshan Lake Wetland (Hangzhou)</div>
                     <div class="place-desc">Matcha Lake - water forest with emerald waters</div>
                 </div>
                 <div class="place-meta">
@@ -536,8 +731,6 @@
                 <h3>To Research</h3>
                 <div class="todo-item">Find out the exact commute between places</div>
                 <div class="todo-item">Find places to eat</div>
-                <div class="todo-item">Find at least 2 street food spots in Shanghai</div>
-                <div class="todo-item">Find at least 1 street food spot in Wuxi</div>
                 <div class="todo-item">Places to stay in Wuxi</div>
                 <div class="todo-item">Research Disneyland</div>
             </div>
@@ -581,26 +774,40 @@
         };
 
         const locations = [
-            { name: 'Xintiandi', desc: 'Upscale dining, bars, galleries in restored Shikumen buildings', coords: [31.2195, 121.4737], icon: '🏛️' },
-            { name: 'Nanjing Road', desc: "World's longest shopping street (5.5 km)", coords: [31.2354, 121.4748], icon: '🛍️' },
-            { name: 'Tianzifang', desc: 'Artsy lanes with studios, cafes and boutiques', coords: [31.2105, 121.4672], icon: '🎨' },
-            { name: 'Shanghai Museum', desc: '11 galleries - bronze, jade, ceramics, calligraphy', coords: [31.2277, 121.4754], icon: '🏺' },
-            { name: 'Shanghai Disney', desc: "China's first Disney park - TRON, Pirates, Zootopia", coords: [31.1434, 121.6677], icon: '🏰' },
-            { name: 'teamLab Borderless', desc: '6,600 sqm digital art museum, 50+ interactive installations', coords: [31.2259, 121.4780], icon: '🎨' },
-            { name: 'Natural History Museum', desc: 'Dinosaur skeletons, 26m Mamenchisaurus', coords: [31.2686, 121.4444], icon: '🦕' },
-            { name: 'Science & Technology Museum', desc: 'Interactive exhibits, robotics, space exploration', coords: [31.2231, 121.5455], icon: '🔬' },
-            { name: 'Shanghai Tower', desc: 'Tallest building in China - observation deck at 546m', coords: [31.2335, 121.5052], icon: '🏙️' },
-            { name: 'The Bund', desc: 'Iconic waterfront with colonial architecture', coords: [31.2397, 121.4906], icon: '🌆' },
-            { name: 'Xuyan (叙宴)', desc: 'Tang Dynasty palace feast with light show', coords: [31.2820, 121.4442], icon: '👑' },
-            { name: 'Qingming Bridge', desc: 'Ancient canal bridge and historic area', coords: [31.5656, 120.2972], icon: '🌉' },
-            { name: 'Bogong Island Park', desc: 'Waterfront park on Taihu Lake islands', coords: [31.5344, 120.2589], icon: '🏞️' },
-            { name: 'Well wells', desc: 'Trendy cafe and art space in Wuxi', coords: [31.5720, 120.2950], icon: '☕' },
-            { name: 'Yourway taproom', desc: 'Craft brewery and taproom with local beers', coords: [31.5680, 120.3020], icon: '🍺' },
-            { name: 'Meijiawu Tea Village', desc: 'Longjing Dragon Well tea plantations', coords: [30.20, 120.09], icon: '🍵' },
-            { name: 'Xixi Wetland', desc: 'National wetland park with waterways', coords: [30.27, 120.06], icon: '🦆' },
-            { name: 'Moj Matcha', desc: 'Matcha café near Xixi Wetland', coords: [30.27, 120.05], icon: '🍵' },
-            { name: 'Qingshan Lake Wetland', desc: 'Matcha Lake - water forest in Lin\'an District', coords: [30.23, 119.70], icon: '🌿' },
-            { name: 'Modena Putuo Shanghai', desc: 'Shanghai accommodation base', coords: [31.2506, 121.3956], icon: '🏠' }
+            { name: 'Food: Xintiandi', desc: 'Upscale dining, bars, galleries in restored Shikumen buildings', coords: [31.2195, 121.4737], icon: '🏛️' },
+            { name: 'Spot: Nanjing Road', desc: "World's longest shopping street (5.5 km)", coords: [31.2354, 121.4748], icon: '🛍️' },
+            { name: 'Spot: Tianzifang', desc: 'Artsy lanes with studios, cafes and boutiques', coords: [31.2105, 121.4672], icon: '🎨' },
+            { name: 'Museum: Shanghai Museum', desc: '11 galleries - bronze, jade, ceramics, calligraphy', coords: [31.2277, 121.4754], icon: '🏺' },
+            { name: 'Spot: Shanghai Disney', desc: "China's first Disney park - TRON, Pirates, Zootopia", coords: [31.1434, 121.6677], icon: '🏰' },
+            { name: 'Museum: teamLab Borderless', desc: '6,600 sqm digital art museum, 50+ interactive installations', coords: [31.2259, 121.4780], icon: '🎨' },
+            { name: 'Museum: Natural History Museum', desc: 'Dinosaur skeletons, 26m Mamenchisaurus', coords: [31.2686, 121.4444], icon: '🦕' },
+            { name: 'Museum: Science & Technology Museum', desc: 'Interactive exhibits, robotics, space exploration', coords: [31.2231, 121.5455], icon: '🔬' },
+            { name: 'Spot: Shanghai Tower', desc: 'Tallest building in China - observation deck at 546m', coords: [31.2335, 121.5052], icon: '🏙️' },
+            { name: 'Spot: The Bund', desc: 'Iconic waterfront with colonial architecture', coords: [31.2397, 121.4906], icon: '🌆' },
+            { name: 'Food: Xuyan (叙宴)', desc: 'Tang Dynasty palace feast with light show', coords: [31.2820, 121.4442], icon: '👑' },
+            { name: 'Food: Huanghe Road', desc: 'Sheng jian bao + xiaolongbao (Yang\'s, Jia Jia)', coords: [31.2333, 121.4758], icon: '🥟' },
+            { name: 'Food: Chenghuangmiao Street Food', desc: 'Crab shell cake, tanghulu, local snacks', coords: [31.2260, 121.4920], icon: '🥟' },
+            { name: 'Food: Qi Bao Old Street', desc: 'Tanghulu, stinky tofu, ancient water town', coords: [31.1550, 121.3550], icon: '🥟' },
+            { name: 'Spot: Turtle Head Isle', desc: 'Scenic peninsula on Taihu Lake, great for biking', coords: [31.5238, 120.2208], icon: '🏝️' },
+            { name: 'Spot: Qingming Bridge', desc: 'Ancient canal bridge and historic area', coords: [31.5656, 120.2972], icon: '🌉' },
+            { name: 'Spot: Bogong Island Park', desc: 'Waterfront park on Taihu Lake islands', coords: [31.5344, 120.2589], icon: '🏞️' },
+            { name: 'Drink: Well wells', desc: 'Trendy cafe and art space in Wuxi', coords: [31.5720, 120.2950], icon: '☕' },
+            { name: 'Drink: Yourway taproom', desc: 'Craft brewery and taproom with local beers', coords: [31.5680, 120.3020], icon: '🍺' },
+            { name: 'Food: Nanchan Temple Food Street', desc: 'Wuxi soup dumplings, hand-pulled noodles, local snacks', coords: [31.5740, 120.3030], icon: '🥟' },
+            { name: 'Spot: Pegasus Water City', desc: 'Venice-style water town with horse shows', coords: [31.92, 120.28], icon: '🐴' },
+            { name: 'GreenTree Inn Wuxi', desc: 'Wuxi Nanchang Walking Street accommodation', coords: [31.5650, 120.3050], icon: '🏠' },
+            { name: 'Spot: Meijiawu Tea Village', desc: 'Longjing Dragon Well tea plantations', coords: [30.20, 120.09], icon: '🍵' },
+            { name: 'Spot: Xixi Wetland', desc: 'National wetland park with waterways', coords: [30.27, 120.06], icon: '🦆' },
+            { name: 'Drink: Moj Matcha', desc: 'Matcha café near Xixi Wetland', coords: [30.27, 120.05], icon: '🍵' },
+            { name: 'Spot: Qingshan Lake Wetland', desc: 'Matcha Lake - water forest in Lin\'an District', coords: [30.23, 119.70], icon: '🌿' },
+            { name: 'Modena Putuo Shanghai', desc: 'Walk 10min to Zhenru Station Line 11', coords: [31.2506, 121.3956], icon: '🏠' },
+            { name: 'Station: Zhenru (Line 11 Start)', desc: '10min walk from homestay, take Line 11 here', coords: [31.2280, 121.3750], icon: '🚇' },
+            { name: 'Station: Jiangsu Road (Line 11→2 Transfer)', desc: 'From Putuo Line 11, transfer to Line 2 here', coords: [31.2194, 121.4255], icon: '🚇' },
+            { name: 'Station: People\'s Square → Shanghai Center', desc: 'Line 2 from Jiangsu Road (15min more)', coords: [31.2304, 121.4737], icon: '🚇' },
+            { name: 'Station: Shanghai West → Wuxi', desc: 'Near Putuo homestay, 28min to Wuxi (255 trains/day)', coords: [31.2600, 121.3700], icon: '🚄' },
+            { name: 'Station: Shanghai Hongqiao → Hangzhou/Wuxi', desc: 'Main hub: 45min to Hangzhou, 30min to Wuxi', coords: [31.1910, 121.3098], icon: '🚄' },
+            { name: 'Station: Wuxi ← Shanghai', desc: 'Main arrival from Shanghai (28-60min, $4)', coords: [31.58981, 120.30181], icon: '🚄' },
+            { name: 'Station: Hangzhou East ← Shanghai', desc: 'Main arrival from Shanghai (45min-2hr, $4-70)', coords: [30.29368, 120.20852], icon: '🚄' }
         ];
 
         const locationNameToIndex = {};
@@ -654,6 +861,17 @@
             window.open(`https://www.google.com/search?q=${searchQuery}&udm=2`, '_blank');
         }
 
+        function zoomToCity(city) {
+            const cityCoords = {
+                'shanghai': { coords: [31.2304, 121.4737], zoom: 14 },
+                'wuxi': { coords: [31.55, 120.29], zoom: 14 },
+                'hangzhou': { coords: [30.24, 120.08], zoom: 11 }
+            };
+            if (cityCoords[city]) {
+                map.setView(cityCoords[city].coords, cityCoords[city].zoom, { animate: true });
+            }
+        }
+
         locations.forEach((loc, idx) => {
             const marker = L.marker(loc.coords, {
                 icon: createIcon()
@@ -695,6 +913,82 @@
                 });
             }
         });
+
+        // Draw route lines
+        // Walk route: Putuo → Zhenru Station
+        const walkRoute = L.polyline([
+            [31.2506, 121.3956], // Modena Putuo
+            [31.2280, 121.3750]  // Zhenru Station
+        ], {
+            color: '#FF6B6B',
+            weight: 3,
+            opacity: 0.7,
+            dashArray: '5, 5'
+        }).addTo(map).bindPopup('🚶 Walk: Homestay → Zhenru Station (10min)');
+
+        L.marker([31.2393, 121.3853], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #FF6B6B; font-weight: bold; font-size: 11px; white-space: nowrap;">🚶 WALK | 10min | Free</div>',
+                iconSize: [150, 20]
+            })
+        }).addTo(map);
+
+        // Metro route: Zhenru → Jiangsu Road → People's Square
+        const metroRoute = L.polyline([
+            [31.2280, 121.3750], // Zhenru Station
+            [31.2194, 121.4255], // Jiangsu Road
+            [31.2304, 121.4737]  // People's Square
+        ], {
+            color: '#4A90E2',
+            weight: 4,
+            opacity: 0.7,
+            dashArray: '10, 10'
+        }).addTo(map).bindPopup('🚇 Metro Route: Line 11→2 to Center (20-30min, $1)');
+
+        L.marker([31.2237, 121.4400], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #4A90E2; font-weight: bold; font-size: 11px; white-space: nowrap;">🚇 METRO | 20-30min | $1</div>',
+                iconSize: [170, 20]
+            })
+        }).addTo(map);
+
+        // Train route: Shanghai West → Wuxi
+        const wuxiRoute = L.polyline([
+            [31.2600, 121.3700], // Shanghai West
+            [31.58981, 120.30181] // Wuxi Station
+        ], {
+            color: '#38b2ac',
+            weight: 5,
+            opacity: 0.8
+        }).addTo(map).bindPopup('🚄 Train: Shanghai → Wuxi (28min, $4)');
+
+        L.marker([31.42, 120.84], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #38b2ac; font-weight: bold; font-size: 11px; white-space: nowrap;">🚄 TRAIN | 28min | $4</div>',
+                iconSize: [140, 20]
+            })
+        }).addTo(map);
+
+        // Train route: Shanghai Hongqiao → Hangzhou East
+        const hangzhouRoute = L.polyline([
+            [31.1910, 121.3098], // Shanghai Hongqiao
+            [30.29368, 120.20852] // Hangzhou East
+        ], {
+            color: '#48bb78',
+            weight: 5,
+            opacity: 0.8
+        }).addTo(map).bindPopup('🚄 Train: Shanghai → Hangzhou (45min, $4-70)');
+
+        L.marker([30.74, 120.76], {
+            icon: L.divIcon({
+                className: 'route-label',
+                html: '<div style="background: white; padding: 4px 8px; border-radius: 4px; border: 2px solid #48bb78; font-weight: bold; font-size: 11px; white-space: nowrap;">🚄 TRAIN | 45min | $4-70</div>',
+                iconSize: [160, 20]
+            })
+        }).addTo(map);
 
         const bounds = L.latLngBounds(locations.map(loc => loc.coords));
         map.fitBounds(bounds, { padding: [50, 50] });
